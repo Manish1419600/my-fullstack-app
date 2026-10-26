@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleAuthButton from "../components/GoogleAuthButton";
 
+
+
 function Login() {
 
   const navigate = useNavigate();
@@ -30,14 +32,14 @@ function Login() {
 
     try {
 
-      const response =
-        await axios.post(
-          "/api/auth/login",
-          {
-            email: email.trim().toLowerCase(),
-            password
-          }
-        );
+      const response = await axios.post(
+  `${API_URL}/api/auth/login`,
+  {
+    email: email.trim().toLowerCase(),
+    password
+  }
+);
+
 
       storeSession(response.data);
       navigate("/dashboard");
