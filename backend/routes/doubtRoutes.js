@@ -8,7 +8,7 @@ const geminiModel = () => {
   const configuredModel = process.env.GEMINI_MODEL?.trim();
   return /^gemini-[a-z0-9.-]+$/i.test(configuredModel || "")
     ? configuredModel
-    : "gemini-3.8-flash";
+    : "gemini-3.5-flash";
 };
 
 // =====================================
@@ -64,7 +64,11 @@ const calculateSimilarity = (
 // GENERATE ANSWER USING GEMINI
 // =====================================
 const generateDoubtAnswer = async (question) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const apiKey = process.env.GEMINI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not configured.");
+  }
+  const ai = new GoogleGenAI({ apiKey });
 
   const prompt = `
 You are StudyGenie AI, an academic doubt-solving assistant for IT students.
@@ -80,18 +84,18 @@ Instructions:
 - Keep the answer suitable for exam preparation.
 `;
 
-  const models = [...new Set([geminiModel(), "gemini-3.6-flash"])];
+  const models = [...new Set([geminiModel(), "gemini-3.5-flash", "gemini-3.7-flash", "gemini-2.5-flash-lite", "gemini-flash-latest"])];
   let lastError;
 
   for (const model of models) {
-    for (let attempt = 1; attempt <= 3; attempt++) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
       try {
         const response = await ai.models.generateContent({ model, contents: prompt });
-        return response.text;
+        if (response?.text) return response.text;
       } catch (error) {
         lastError = error;
-        if (error?.status !== 503) throw error;
-        await new Promise((resolve) => setTimeout(resolve, 1500 * attempt));
+        console.warn(`DoubtSolver: ${model} attempt ${attempt} failed: ${error.message}`);
+        await new Promise((resolve) => setTimeout(resolve, 800 * attempt));
       }
     }
   }

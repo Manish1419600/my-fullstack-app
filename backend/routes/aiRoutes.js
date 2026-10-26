@@ -16,6 +16,7 @@ const {
   sendAIError
 } = require("../utils/aiErrors");
 const router = express.Router();
+const getGeminiApiKey = () => process.env.GEMINI_API_KEY?.trim();
 
 const aiFileUpload = multer({
 
@@ -81,8 +82,12 @@ const generateWithOpenAICompatible = async (prompt) => {
 
 const generateWithFallback = async (ai, prompt, config = {}) => {
   const models = [...new Set([
-    process.env.GEMINI_MODEL || "gemini-3.8-flash",
-    ...(process.env.GEMINI_FALLBACK_MODELS || "gemini-3.6-flash")
+    process.env.GEMINI_MODEL || "gemini-3.5-flash",
+    "gemini-3.5-flash",
+    "gemini-3.7-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-flash-latest",
+    ...(process.env.GEMINI_FALLBACK_MODELS || "")
       .split(",").map((m) => m.trim()).filter(Boolean)
   ])];
   let lastError;
@@ -178,7 +183,7 @@ router.post(
 
 
       const ai = new GoogleGenAI({
-        apiKey: process.env.GEMINI_API_KEY,
+        apiKey: getGeminiApiKey(),
         httpOptions: {
           timeout: 30000,
           retryOptions: { attempts: 1 }
@@ -424,14 +429,15 @@ router.post(
         });
       }
 
-      if (!process.env.GEMINI_API_KEY) {
+      const apiKey = getGeminiApiKey();
+      if (!apiKey) {
         return res.status(503).json({
-          message: "AI generation is not configured. Add GEMINI_API_KEY in Replit Secrets."
+          message: "AI generation is not configured. Add GEMINI_API_KEY."
         });
       }
 
       const ai = new GoogleGenAI({
-        apiKey: process.env.GEMINI_API_KEY,
+        apiKey,
         httpOptions: {
           timeout: 90000,
           retryOptions: { attempts: 1 }
