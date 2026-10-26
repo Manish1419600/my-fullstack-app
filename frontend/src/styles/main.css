@@ -809,7 +809,10 @@ footer span {
 
   .authRight {
     min-height: 100vh;
-    padding: 34px;
+    padding: 24px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .statGrid {
@@ -820,30 +823,148 @@ footer span {
 
 }
 
+.mobileAuthBrand {
+  display: none;
+}
+
+.mobileNavActions {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobileNavActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mobileLoginBtn {
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #6038e8;
+    background: transparent;
+    border: 1px solid #d5ccff;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  .mobileGetStartedBtn {
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    background: #6038e8;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  .mobileAuthBrand {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .mobileAuthBrand a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: 800;
+    color: #11142b;
+  }
+
+  .mobileAuthBrand img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .mobileAuthBrand strong {
+    color: #6038e8;
+  }
+}
+
 @media (max-width: 520px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
+  .navbar {
+    height: 64px;
+    padding: 0 14px;
+  }
+
+  .logo {
+    font-size: 20px;
+    gap: 6px;
+  }
+
+  .logo img,
+  .logo .logoImg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mobileLoginBtn,
+  .mobileGetStartedBtn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
   .authRight {
-    padding: 18px;
+    padding: 14px 10px;
   }
 
   .authCard {
-    padding: 27px 22px;
+    padding: 22px 16px;
     border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   }
 
   .authCard h1 {
-    font-size: 27px;
+    font-size: 23px;
+    margin-bottom: 4px;
+  }
+
+  .authCard > p {
+    font-size: 13px;
+    margin-bottom: 14px;
   }
 
   .authCard label {
-    margin-top: 17px;
+    margin-top: 14px;
+    font-size: 13px;
   }
 
   .authCard input {
-    padding: 13px;
-    font-size: 14px;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 8px;
   }
 
   .authButton {
-    padding: 14px;
+    padding: 13px;
+    font-size: 15px;
+    border-radius: 8px;
+    margin-top: 18px;
+  }
+
+  .hero h1 {
+    font-size: 32px;
+  }
+
+  .hero p {
+    font-size: 15px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+  }
+
+  .statGrid {
+    grid-template-columns: 1fr;
   }
 }

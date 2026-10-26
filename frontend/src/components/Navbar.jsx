@@ -29,9 +29,12 @@ function Navbar() {
         <Link to="/register" className="primaryBtn">
           Get Started
         </Link>
-
       </div>
 
+      <div className="mobileNavActions">
+        <Link to="/login" className="mobileLoginBtn">Login</Link>
+        <Link to="/register" className="mobileGetStartedBtn">Get Started</Link>
+      </div>
     </nav>
   );
 }

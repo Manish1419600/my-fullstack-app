@@ -118,6 +118,12 @@ function Login() {
           className="authCard"
           onSubmit={handleLogin}
         >
+          <div className="mobileAuthBrand">
+            <Link to="/">
+              <img src="/logo.png" alt="StudyGenie" />
+              <span>Study<strong>Genie</strong></span>
+            </Link>
+          </div>
 
           <h1>
             Welcome Back!

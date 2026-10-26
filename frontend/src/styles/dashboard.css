@@ -991,24 +991,35 @@
 }
 
 
+.mobileBottomNav {
+  display: none;
+}
+
 @media(max-width: 800px) {
 
   .dashboardSidebar {
-    display: none;
+    display: none !important;
   }
 
   .dashboardMain {
-    width: 100%;
-    margin-left: 0;
-
-    padding: 20px;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding: 16px 14px 85px 14px !important;
   }
 
   .dashboardTopbar {
     align-items: flex-start;
     flex-direction: column;
+    gap: 12px;
+    padding-bottom: 12px;
+  }
 
-    gap: 15px;
+  .welcomeText h1 {
+    font-size: 22px;
+  }
+
+  .welcomeText p {
+    font-size: 13px;
   }
 
   .topbarActions {
@@ -1021,17 +1032,96 @@
   }
 
   .dashboardStats {
-    grid-template-columns:
-      1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .statCard {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .statCard h3 {
+    font-size: 20px;
+  }
+
+  .statCard p {
+    font-size: 12px;
   }
 
   .learningStats {
-    grid-template-columns:
-      repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 
   .quizDashboardContent {
     flex-direction: column;
   }
 
+  .dashboardRealDataGrid {
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+  }
+
+  .dashboardActionLinks {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .dashboardActionLinks a {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+  }
+
+  /* Compact Mobile Bottom Navigation */
+  .mobileBottomNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #ffffff;
+    border-top: 1px solid #eeeaff;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 9999;
+    box-shadow: 0 -4px 16px rgba(17, 20, 43, 0.08);
+    padding: 0 4px;
+  }
+
+  .mobileBottomNav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #71718a;
+    font-size: 11px;
+    font-weight: 600;
+    flex: 1;
+    padding: 6px 0;
+    transition: color 0.15s ease;
+  }
+
+  .mobileBottomNav a span {
+    font-size: 18px;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .mobileBottomNav a.active {
+    color: #6038e8;
+  }
+
+  .mobileBottomNav a.active span {
+    transform: scale(1.15);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboardStats {
+    grid-template-columns: 1fr;
+  }
 }
