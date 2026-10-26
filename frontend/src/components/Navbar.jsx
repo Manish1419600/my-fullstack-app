@@ -4,7 +4,8 @@ function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="logo">
-        🎓 Study<span>Genie</span>
+        <img src="/logo.png" alt="StudyGenie" className="logoImg" />
+        Study<span>Genie</span>
       </Link>
 
       <div className="navLinks">

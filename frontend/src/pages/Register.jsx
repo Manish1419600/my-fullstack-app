@@ -115,6 +115,10 @@ function Register() {
       <div className="authLeft">
 
         <div>
+          <Link to="/" className="logo" style={{ marginBottom: "24px" }}>
+            <img src="/logo.png" alt="StudyGenie" className="logoImg" />
+            Study<span>Genie</span>
+          </Link>
 
           <span className="badge">
             ✨ Create Your Account

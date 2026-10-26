@@ -82,6 +82,10 @@ function Login() {
     <div className="authPage">
 
       <div className="authLeft">
+        <Link to="/" className="logo" style={{ marginBottom: "24px" }}>
+          <img src="/logo.png" alt="StudyGenie" className="logoImg" />
+          Study<span>Genie</span>
+        </Link>
 
         <span className="badge">
           👋 Welcome Back

@@ -43,6 +43,18 @@ a {
   font-size: 28px;
   font-weight: 800;
   color: #11142b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo img,
+.logo .logoImg {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .logo span {
