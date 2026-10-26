@@ -33,12 +33,12 @@ function Login() {
     try {
 
       const response = await axios.post(
-  `${API_URL}/api/auth/login`,
-  {
-    email: email.trim().toLowerCase(),
-    password
-  }
-);
+        "/api/auth/login",
+        {
+          email: email.trim().toLowerCase(),
+          password
+        }
+      );
 
 
       storeSession(response.data);
