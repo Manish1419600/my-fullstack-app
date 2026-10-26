@@ -229,7 +229,7 @@ router.post(
     }
 );
 
-const DEFAULT_GOOGLE_CLIENT_ID = "909570171378-bdl1jlpoob70fioukd2a1t3sn3ghpc7r.apps.googleusercontent.com";
+const DEFAULT_GOOGLE_CLIENT_ID = "926969916400-h69ugsdbbvjrtp02kf5j8theahdoefgv.apps.googleusercontent.com";
 
 router.get("/google/config", (_req, res) => {
     res.json({
