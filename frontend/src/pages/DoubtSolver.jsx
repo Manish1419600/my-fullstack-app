@@ -61,97 +61,31 @@ function DoubtSolver() {
   }, [messages, loading]);
 
   const handleAskDoubt = async () => {
-  if (loading || quotaBlocked) return;
-  const text = question.trim();
-  if (!text) return alert("Please enter your doubt.");
-  if (!localStorage.getItem("token")) return alert("Please login first.");
+    if (loading || quotaBlocked) return;
+    const text = question.trim();
+    if (!text) return alert("Please enter your doubt.");
+    if (!localStorage.getItem("token")) return alert("Please login first.");
 
-  addMessage({ role: "user", text });
-  setQuestion("");
-  setLoading(true);
+    addMessage({ role: "user", text });
+    setQuestion("");
+    setLoading(true);
 
-  // 1. Create a placeholder message for the incoming AI response
-  const aiMessageId = newId();
-  setMessages((prev) => [
-    ...prev,
-    { id: aiMessageId, role: "assistant", text: "", source: "gemini" }
-  ]);
-
-  try {
-    // 2. Use native fetch instead of axios to stream the response data
-    const response = await fetch("/api/doubts/ask", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
-      },
-      body: JSON.stringify({ question: text }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      if (errorData?.code === "AI_QUOTA_EXHAUSTED") setQuotaBlocked(true);
-      throw new Error(errorData?.message || "Failed to fetch stream");
+    try {
+      const { data } = await axios.post("/api/doubts/ask", { question: text }, authConfig());
+      addMessage({ role: "assistant", text: data.answer, source: data.source });
+      loadHistory();
+    } catch (error) {
+      const data = error.response?.data;
+      if (data?.code === "AI_QUOTA_EXHAUSTED") setQuotaBlocked(true);
+      console.error("Ask Doubt Error:", error.response?.status || 0, data?.message || error.message);
+      addMessage({
+        role: "assistant",
+        text: data?.message || "Sorry, I could not solve this doubt right now."
+      });
+    } finally {
+      setLoading(false);
     }
-
-    // 3. Set up the stream reader
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
-    let accumulatedText = "";
-    let detectedSource = "gemini";
-
-    // 4. Read chunks as they arrive from the backend
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value, { stream: true });
-      accumulatedText += chunk;
-
-      // Intercept and parse the metadata tag sent by the backend
-      if (accumulatedText.startsWith("__METADATA__:")) {
-        const lineBreakIndex = accumulatedText.indexOf("\n");
-        if (lineBreakIndex !== -1) {
-          const metaLine = accumulatedText.substring(0, lineBreakIndex);
-          const jsonStr = metaLine.replace("__METADATA__:", "");
-          try {
-            const parsed = JSON.parse(jsonStr);
-            detectedSource = parsed.source;
-          } catch (e) {
-            console.error("Failed to parse metadata", e);
-          }
-          // Remove metadata string from the actual text displayed to the user
-          accumulatedText = accumulatedText.substring(lineBreakIndex + 1);
-        }
-      }
-
-      // Update the message bubble in real-time chunk by chunk
-      setMessages((prev) =>
-        prev.map((msg) =>
-          msg.id === aiMessageId 
-            ? { ...msg, text: accumulatedText, source: detectedSource } 
-            : msg
-        )
-      );
-    }
-
-    // Refresh history sidebar once stream finishes completely
-    loadHistory();
-
-  } catch (error) {
-    console.error("Streaming Error:", error);
-    setMessages((prev) =>
-      prev.map((msg) =>
-        msg.id === aiMessageId 
-          ? { ...msg, text: error.message || "Sorry, I could not solve this doubt right now." } 
-          : msg
-      )
-    );
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
