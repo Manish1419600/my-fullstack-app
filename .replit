@@ -1,0 +1,70 @@
+modules = ["nodejs-24"]
+[nix]
+channel = "stable-25_05"
+packages = ["unzip"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Backend API"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd frontend && node node_modules/vite/bin/vite.js --host 0.0.0.0 --port 5000"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Backend API"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd backend && PORT=3001 node server.js"
+waitForPort = 3001
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[ports]]
+localPort = 3001
+externalPort = 3001
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3002
+
+[[ports]]
+localPort = 5002
+externalPort = 3003
+
+[[ports]]
+localPort = 23636
+externalPort = 3000
+
+[userenv]
+
+[userenv.shared]
+GEMINI_MODEL = "gemini-3.8-flash"
+GOOGLE_CLIENT_ID = "909570171378-bdl1jlpoob70fioukd2a1t3sn3ghpc7r.apps.googleusercontent.com"
