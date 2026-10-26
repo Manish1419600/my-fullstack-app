@@ -9,7 +9,7 @@ const googleClient = new OAuth2Client();
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-const jwtSigningKey = () => process.env.JWT_SECRET || process.env.SESSION_SECRET;
+const jwtSigningKey = () => process.env.JWT_SECRET || process.env.SESSION_SECRET || "studygenie_secret_key_123";
 
 const sendUserSession = (res, user) => {
     const secret = jwtSigningKey();
@@ -229,15 +229,17 @@ router.post(
     }
 );
 
+const DEFAULT_GOOGLE_CLIENT_ID = "909570171378-bdl1jlpoob70fioukd2a1t3sn3ghpc7r.apps.googleusercontent.com";
+
 router.get("/google/config", (_req, res) => {
     res.json({
-        clientId: process.env.GOOGLE_CLIENT_ID || null
+        clientId: (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_ID.trim()) || DEFAULT_GOOGLE_CLIENT_ID
     });
 });
 
 router.post("/google", async (req, res) => {
     const { credential } = req.body || {};
-    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientId = (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_ID.trim()) || DEFAULT_GOOGLE_CLIENT_ID;
 
     if (!clientId) {
         return res.status(503).json({

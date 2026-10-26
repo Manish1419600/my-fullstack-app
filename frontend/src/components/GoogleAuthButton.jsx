@@ -44,9 +44,12 @@ function GoogleAuthButton({
     let active = true;
     const buttonContainer = buttonRef.current;
 
+const FALLBACK_CLIENT_ID = "909570171378-bdl1jlpoob70fioukd2a1t3sn3ghpc7r.apps.googleusercontent.com";
+
     axios.get("/api/auth/google/config")
       .then(({ data }) => {
-        if (!data.clientId) {
+        const clientId = data?.clientId || FALLBACK_CLIENT_ID;
+        if (!clientId) {
           if (active) setStatus("unconfigured");
           return null;
         }
@@ -55,7 +58,7 @@ function GoogleAuthButton({
           if (!active || !buttonContainer) return;
 
           window.google.accounts.id.initialize({
-            client_id: data.clientId,
+            client_id: clientId,
             callback: (response) => {
               if (response.credential) {
                 credentialHandlerRef.current(response.credential);
